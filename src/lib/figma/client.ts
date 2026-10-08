@@ -268,16 +268,6 @@ export async function fetchFigmaDocument(
     }
 
     if (response.status === 429) {
-      if (parsed.fileKey === "Ovy67RJUeK4jPMmhzFei9p" || request.figmaUrl.toLowerCase().includes("thinkiit")) {
-        return {
-          name: "thinkiit 2nd project",
-          document: thinkiitLoginPreset,
-          isLiveApi: true,
-          version: "2.0.0-verified",
-          extractedDesign: thinkiitExtractedDesign,
-          devAssets: thinkiitDevAssets,
-        };
-      }
       if (cached) {
         return {
           name: cached.name,
@@ -287,8 +277,11 @@ export async function fetchFigmaDocument(
           devAssets: cached.devAssets,
         };
       }
+      const retryAfter = response.headers.get("retry-after");
+      const retrySec = retryAfter ? parseInt(retryAfter, 10) : 0;
+      const retryDuration = retrySec > 3600 ? ` (~${Math.round(retrySec / 3600)} hours)` : retrySec > 0 ? ` (${retrySec}s)` : "";
       throw new Error(
-        `Figma API rate limit reached (HTTP 429: Too Many Requests). Please wait 30 seconds before generating again.`
+        `Figma API rate limit reached (HTTP 429: Too Many Requests)${retryDuration}. Figma Starter tier accounts enforce strict rate limit quotas. Please provide a fresh Personal Access Token in API Keys & Credentials, use the PostgreSQL cached project, or paste your Figma JSON directly into the JSON import field.`
       );
     }
 

@@ -10,72 +10,101 @@ const path = require("path");
 
 const PORT = process.env.PORT || 3001;
 
-// Default initial state for ThinkIIT project
+// Default initial state synced from real Figma document
 let currentProjectState = {
-  projectName: "ThinkIIT Learning & Operations Platform",
-  brandName: "ThinkIIT",
-  category: "edtech",
+  projectName: "thinkiit 2nd project",
+  brandName: "thinkIIT",
+  category: "EdTech Content Hierarchy & Operations",
   screens: [
     {
-      id: "batches",
-      title: "Batch Management",
-      subtitle: "Live academic cohorts, JEE/NEET test assignments and validity",
-      badge: "Cohorts",
-      columns: ["Batch Name", "Class", "Target Test", "Academic Year", "Valid Upto", "Status"],
+      id: "parent-node",
+      title: "Parent node",
+      subtitle: "Content hierarchy tree view with parent types, codes, and leaf lesson counts",
+      badge: "CONTENT MANAGEMENT",
+      type: "tree",
+      columns: ["Parent Node", "Course", "Subject", "Chapter", "Topic", "Leaf Lessons", "Actions"],
       rows: [
-        { "Batch Name": "Alpha JEE Advanced 2026", "Class": "12th Standard", "Target Test": "JEE Advanced", "Academic Year": "2025-2026", "Valid Upto": "30 Jun 2026", "Status": "Active" },
-        { "Batch Name": "Bravo NEET Champions", "Class": "11th Standard", "Target Test": "NEET UG", "Academic Year": "2025-2026", "Valid Upto": "31 Jul 2026", "Status": "Active" },
-        { "Batch Name": "Foundation Olympiad X", "Class": "10th Standard", "Target Test": "NTSE / Olympiad", "Academic Year": "2024-2025", "Valid Upto": "31 Mar 2025", "Status": "Completed" },
-        { "Batch Name": "Weekend Crash Revision", "Class": "12th Pass", "Target Test": "JEE Main", "Academic Year": "2024-2025", "Valid Upto": "15 Apr 2025", "Status": "Active" },
+        { "Parent Node": "11345 - /JEE/Physics/Projectile", "Course": "JEE-MAIN", "Subject": "Physics", "Chapter": "Kinematics", "Topic": "Projectile Motion", "Leaf Lessons": "8 Lessons", "Actions": "Edit / Add Child" },
+        { "Parent Node": "11346 - /JEE/Chemistry/Organic", "Course": "JEE-MAIN", "Subject": "Chemistry", "Chapter": "Reaction Mechanisms", "Topic": "Electrophiles", "Leaf Lessons": "12 Lessons", "Actions": "Edit / Add Child" },
+        { "Parent Node": "11347 - /NEET/Biology/Cell", "Course": "NEET", "Subject": "Biology", "Chapter": "Cell Biology", "Topic": "Mitochondria", "Leaf Lessons": "6 Lessons", "Actions": "Edit / Add Child" },
+        { "Parent Node": "11348 - /JEE/Maths/Calculus", "Course": "JEE-MAIN", "Subject": "Mathematics", "Chapter": "Definite Integrals", "Topic": "By Parts", "Leaf Lessons": "10 Lessons", "Actions": "Edit / Add Child" },
       ],
     },
     {
-      id: "users",
-      title: "User Management",
-      subtitle: "Student & faculty directory with access roles and batch assignments",
-      badge: "Access Control",
-      columns: ["Username", "Email", "Assigned Batch", "Access Role", "Status"],
+      id: "parent-edit-mode",
+      title: "Parent Edit mode",
+      subtitle: "Form editor modal to update parent node title, subject code, and course mapping",
+      badge: "CONTENT MANAGEMENT",
+      type: "form",
+      columns: ["Field", "Type", "Current Value", "Validation"],
       rows: [
-        { "Username": "Aarav Sharma", "Email": "aarav.sharma@thinkiit.org", "Assigned Batch": "Alpha JEE 2026", "Access Role": "Student", "Status": "Active" },
-        { "Username": "Priya Verma", "Email": "priya.verma@thinkiit.org", "Assigned Batch": "Bravo NEET", "Access Role": "Student", "Status": "Active" },
-        { "Username": "Dr. S. K. Gupta", "Email": "skgupta@thinkiit.org", "Assigned Batch": "Physics Lead", "Access Role": "Faculty Head", "Status": "Active" },
-        { "Username": "Rohan Mehra", "Email": "rohan.m@thinkiit.org", "Assigned Batch": "Foundation X", "Access Role": "Student", "Status": "Pending" },
+        { "Field": "Parent Type", "Type": "Dropdown", "Current Value": "Chapter / Topic", "Validation": "Required" },
+        { "Field": "Title", "Type": "Text", "Current Value": "Kinematics - Projectile Motion", "Validation": "Max 120 chars" },
+        { "Field": "Subject Code", "Type": "Code String", "Current Value": "PHY-11-KIN-01", "Validation": "Unique Code" },
+        { "Field": "Status", "Type": "Toggle", "Current Value": "Active (Published)", "Validation": "Required" },
       ],
     },
     {
-      id: "content",
-      title: "Content & Curriculum Hierarchy",
-      subtitle: "Syllabus nodes, chapters, and question banks",
-      badge: "Curriculum",
-      columns: ["Parent Node", "Course", "Subject", "Chapter", "Topic", "Leaf Lessons"],
+      id: "leaf-node",
+      title: "leaf node",
+      subtitle: "Leaf curriculum node directory with DPP practice sets and question banks",
+      badge: "CONTENT MANAGEMENT",
+      type: "table",
+      columns: ["Leaf ID", "Topic Name", "DPP Questions", "Video Lectures", "Difficulty", "Status"],
       rows: [
-        { "Parent Node": "JEE Core", "Course": "Senior Secondary", "Subject": "Physics", "Chapter": "Electrodynamics", "Topic": "Gauss Law", "Leaf Lessons": "14 modules" },
-        { "Parent Node": "JEE Core", "Course": "Senior Secondary", "Subject": "Mathematics", "Chapter": "Integral Calculus", "Topic": "Definite Integrals", "Leaf Lessons": "22 modules" },
-        { "Parent Node": "NEET Core", "Course": "Senior Secondary", "Subject": "Biology", "Chapter": "Genetics & Evolution", "Topic": "Mendelian Principles", "Leaf Lessons": "18 modules" },
-        { "Parent Node": "Foundation", "Course": "Secondary", "Subject": "Chemistry", "Chapter": "Periodic Properties", "Topic": "Atomic Radii", "Leaf Lessons": "8 modules" },
+        { "Leaf ID": "LF-401", "Topic Name": "Horizontal Range Formula & Derivation", "DPP Questions": "25 Questions", "Video Lectures": "45 Mins", "Difficulty": "Moderate", "Status": "Active" },
+        { "Leaf ID": "LF-402", "Topic Name": "Maximum Height in Projectile Motion", "DPP Questions": "30 Questions", "Video Lectures": "50 Mins", "Difficulty": "Easy", "Status": "Active" },
+        { "Leaf ID": "LF-403", "Topic Name": "Trajectory Equation & Numerical Drill", "DPP Questions": "40 Questions", "Video Lectures": "65 Mins", "Difficulty": "Advanced", "Status": "Active" },
       ],
     },
     {
-      id: "institutes",
-      title: "Institute License Management",
-      subtitle: "Multi-tenant institutional licensing & limits",
-      badge: "Licensing",
-      columns: ["Institute Name", "Domain", "License Key", "Max Admins", "Status"],
+      id: "leaf-node-bulk-mode",
+      title: "Leaf Node bulk mode",
+      subtitle: "Bulk CSV curriculum node ingestion and batch hierarchy mapping",
+      badge: "CONTENT MANAGEMENT",
+      type: "grid",
+      columns: ["Batch Column", "Target Mapping", "Validation Status", "Records Count"],
       rows: [
-        { "Institute Name": "Apex Scholars Academy", "Domain": "apex.thinkiit.org", "License Key": "LIC-APX-8921-X", "Max Admins": "25 Admins", "Status": "Active" },
-        { "Institute Name": "Zenith Science Campus", "Domain": "zenith.thinkiit.org", "License Key": "LIC-ZEN-4412-B", "Max Admins": "50 Admins", "Status": "Active" },
-        { "Institute Name": "Pinnacle EduTech Center", "Domain": "pinnacle.thinkiit.org", "License Key": "LIC-PIN-1109-A", "Max Admins": "10 Admins", "Status": "Renewal Needed" },
+        { "Batch Column": "Column A: Subject", "Target Mapping": "Root Curriculum Node", "Validation Status": "100% Matched", "Records Count": "120 Rows" },
+        { "Batch Column": "Column B: Chapter", "Target Mapping": "Parent Node Level 1", "Validation Status": "100% Matched", "Records Count": "120 Rows" },
+        { "Batch Column": "Column C: Leaf Topic", "Target Mapping": "Leaf Node Question Bank", "Validation Status": "Valid", "Records Count": "120 Rows" },
+      ],
+    },
+    {
+      id: "user-management",
+      title: "user management",
+      subtitle: "Faculty, student directory, batch assignments, and account statuses",
+      badge: "user management",
+      type: "table",
+      columns: ["Username", "Email", "Assigned Center", "Access Role", "Status"],
+      rows: [
+        { "Username": "Kunal Kapoor", "Email": "kunal@thinkiit.in", "Assigned Center": "thinkIIT Central", "Access Role": "Administrator", "Status": "Active" },
+        { "Username": "Dr. Ramesh Sharma", "Email": "sharma.physics@thinkiit.in", "Assigned Center": "Kota Campus", "Access Role": "Head of Physics", "Status": "Active" },
+        { "Username": "Priya Nair", "Email": "priya.bio@thinkiit.in", "Assigned Center": "Hyderabad Hub", "Access Role": "Senior Faculty", "Status": "Active" },
+        { "Username": "Aarav Patel", "Email": "aarav.p@student.thinkiit.in", "Assigned Center": "Delhi Center", "Access Role": "Student (Rank 1)", "Status": "Active" },
+      ],
+    },
+    {
+      id: "institute-management",
+      title: "institute management",
+      subtitle: "Sub-domain multi-tenancy, partner center licensing, and SLA monitors",
+      badge: "institute management",
+      type: "table",
+      columns: ["Campus Name", "Subdomain", "Seat Allocation", "License Tier", "SLA Status"],
+      rows: [
+        { "Campus Name": "Aryan Kota Main Campus", "Subdomain": "aryan.thinkiit.in", "Seat Allocation": "1,500 / 1,500 Seats", "License Tier": "Enterprise", "SLA Status": "99.99% Uptime" },
+        { "Campus Name": "Apex Hyderabad Center", "Subdomain": "apex.thinkiit.in", "Seat Allocation": "1,880 / 2,000 Seats", "License Tier": "Enterprise", "SLA Status": "99.98% Uptime" },
+        { "Campus Name": "Momentum Mumbai Hub", "Subdomain": "momentum.thinkiit.in", "Seat Allocation": "1,290 / 1,350 Seats", "License Tier": "Standard", "SLA Status": "100% Uptime" },
       ],
     },
   ],
   metrics: [
-    { id: "m-1", title: "Active Batches", value: "24 Batches", subtitle: "Class XII, JEE-MAIN...", trend: "+4 cohorts", isPositive: true },
-    { id: "m-2", title: "Curriculum Nodes", value: "11,345", subtitle: "Physics, Chem, Maths DPP", trend: "+12.4%", isPositive: true },
-    { id: "m-3", title: "Registered Students", value: "4,850", subtitle: "Active student portal logins", trend: "+18.2%", isPositive: true },
-    { id: "m-4", title: "Partner Institutes", value: "18", subtitle: "aryan.ThinkIIT.in active", trend: "100% SLA", isPositive: true },
+    { id: "m-1", title: "Parent Nodes", value: "348 Nodes", subtitle: "Physics, Chem, Maths Tree", trend: "+12.4%", isPositive: true },
+    { id: "m-2", title: "Leaf Nodes", value: "11,345", subtitle: "Questions & DPP Modules", trend: "+8.6%", isPositive: true },
+    { id: "m-3", title: "Registered Students", value: "4,850", subtitle: "Active student portal logins", trend: "+14.2%", isPositive: true },
+    { id: "m-4", title: "Partner Campuses", value: "18", subtitle: "Kota, Hyderabad, Mumbai", trend: "100% SLA", isPositive: true },
   ],
-  isThinkIIT: true,
-  filesCount: 15,
+  filesCount: 16,
   updatedAt: new Date().toISOString(),
 };
 
@@ -112,12 +141,10 @@ function generateLiveAppHtml(state) {
       <span class="font-bold text-white tracking-wide">LIVE APP RUNNING ON PORT 3001</span>
       <span class="hidden sm:inline text-slate-500">•</span>
       <span class="text-sky-400 font-medium truncate max-w-xs">${state.projectName}</span>
+      <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-mono">${state.screens.length} Screens Synced</span>
     </div>
 
     <div class="flex items-center gap-2">
-      <button id="view-toggle-btn" class="px-3 py-1 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition-colors flex items-center gap-1.5 shadow-sm">
-        <span id="view-toggle-text">🔐 View Login Portal</span>
-      </button>
       <a href="http://localhost:3001" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors flex items-center gap-1 border border-slate-700">
         <span>↗ Standalone Window</span>
       </a>
@@ -129,119 +156,18 @@ function generateLiveAppHtml(state) {
 
   <script>
     const projectState = ${stateJson};
-    let currentView = projectState.isThinkIIT ? "dashboard" : "dashboard";
-    let activeScreenId = projectState.screens[0]?.id || "batches";
+    let activeScreenId = projectState.screens[0]?.id || "parent-node";
     let searchQuery = "";
-    let role = "institute";
+    let formAlert = false;
 
     const appRoot = document.getElementById("app-root");
-    const viewToggleBtn = document.getElementById("view-toggle-btn");
-    const viewToggleText = document.getElementById("view-toggle-text");
-
-    function renderLoginPortal() {
-      appRoot.innerHTML = \`
-        <div class="flex-1 flex items-center justify-center p-6 md:p-12 relative overflow-hidden"
-             style="background: linear-gradient(135deg, #1ba3fc 0%, #2563eb 40%, #6366f1 70%, #581c87 100%); min-height: calc(100vh - 45px);">
-          
-          <div class="w-full max-w-[850px] bg-white rounded-[28px] shadow-2xl p-8 md:p-12 border border-white/20 flex flex-col md:flex-row items-center gap-8 md:gap-12 relative z-10 animate-fade-in text-slate-900">
-            
-            <!-- Left Brand Column -->
-            <div class="w-full md:w-1/2 flex flex-col items-center justify-center text-center p-4">
-              <!-- ThinkIIT Authentic Logo SVG -->
-              <div class="w-28 h-28 mb-4 relative flex items-center justify-center">
-                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
-                  <!-- Foundation Book -->
-                  <path d="M 22 75 Q 50 68 78 75 L 78 82 Q 50 75 22 82 Z" fill="#0096c7" />
-                  <!-- Golden Lightbulb Outline -->
-                  <path d="M 32 46 C 32 36 40 28 50 28 C 60 28 68 36 68 46 C 68 53 64 59 60 63 L 40 63 C 36 59 32 53 32 46 Z" fill="#facc15" stroke="#eab308" stroke-width="2"/>
-                  <!-- Graduation Cap (Mortarboard) -->
-                  <polygon points="50,33 65,39 50,45 35,39" fill="#1e293b" />
-                  <!-- Radiating Rays -->
-                  <line x1="50" y1="18" x2="50" y2="24" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
-                  <line x1="28" y1="26" x2="33" y2="30" stroke="#0096c7" stroke-width="3" stroke-linecap="round"/>
-                  <line x1="72" y1="26" x2="67" y2="30" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
-                </svg>
-              </div>
-
-              <!-- Brand Name -->
-              <div class="text-3xl font-extrabold tracking-tight">
-                <span class="text-[#0096c7]">think</span><span class="text-[#f97316]">IIT</span>
-              </div>
-              <p class="text-xs text-slate-500 font-medium mt-1">Smart Learning & Institute Operations</p>
-            </div>
-
-            <!-- Vertical Divider -->
-            <div class="hidden md:block w-px bg-slate-200 self-stretch my-2"></div>
-
-            <!-- Right Form Column -->
-            <div class="w-full md:w-1/2 flex flex-col space-y-5">
-              <!-- Segmented Role Selector -->
-              <div class="flex items-center justify-center gap-3">
-                <button type="button" id="role-inst" class="px-5 py-2 rounded-full text-xs font-bold transition-all \${role === 'institute' ? 'bg-[#0096c7] text-white shadow-md' : 'bg-slate-100 text-slate-600 border border-slate-200'}">
-                  Institute
-                </button>
-                <button type="button" id="role-stud" class="px-5 py-2 rounded-full text-xs font-bold transition-all \${role === 'student' ? 'bg-[#0096c7] text-white shadow-md' : 'bg-slate-100 text-slate-600 border border-slate-200'}">
-                  Student
-                </button>
-              </div>
-
-              <!-- Inputs with Underline Style -->
-              <form id="login-form" class="space-y-4 pt-2">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Email ID</label>
-                  <input type="email" required placeholder="admin@thinkiit.org" value="admin@thinkiit.org"
-                         class="w-full px-2 py-2 border-b-2 border-slate-300 focus:border-[#0096c7] focus:outline-none text-sm transition-colors bg-transparent"/>
-                </div>
-
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
-                  <input type="password" required placeholder="••••••••••••" value="••••••••••••"
-                         class="w-full px-2 py-2 border-b-2 border-slate-300 focus:border-[#0096c7] focus:outline-none text-sm transition-colors bg-transparent"/>
-                </div>
-
-                <div class="flex justify-end">
-                  <a href="#" class="text-xs text-slate-500 hover:text-[#0096c7] transition-colors">Forget Password?</a>
-                </div>
-
-                <button type="submit" class="w-full py-3 rounded-full text-white font-bold text-sm bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg shadow-blue-500/30 transition-all cursor-pointer">
-                  Login to Dashboard
-                </button>
-              </form>
-
-              <!-- Quick Login By -->
-              <div class="pt-2 text-center">
-                <span class="text-[11px] text-slate-400">Quick Login By</span>
-                <div class="mt-2 flex justify-center">
-                  <button type="button" id="google-login-btn" class="px-6 py-2 rounded-full text-xs font-bold text-white bg-red-500 hover:bg-red-600 transition-colors shadow-sm cursor-pointer">
-                    Google
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      \`;
-
-      document.getElementById("role-inst").addEventListener("click", () => { role = "institute"; renderLoginPortal(); });
-      document.getElementById("role-stud").addEventListener("click", () => { role = "student"; renderLoginPortal(); });
-      document.getElementById("login-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-        currentView = "dashboard";
-        renderApp();
-      });
-      document.getElementById("google-login-btn").addEventListener("click", () => {
-        currentView = "dashboard";
-        renderApp();
-      });
-    }
 
     function renderDashboard() {
       const activeScreen = projectState.screens.find(s => s.id === activeScreenId) || projectState.screens[0];
       const columns = activeScreen.columns || [];
       const rows = (activeScreen.rows || []).filter(r => {
         if (!searchQuery.trim()) return true;
-        return Object.values(r).some(v => v.toLowerCase().includes(searchQuery.toLowerCase()));
+        return Object.values(r).some(v => String(v).toLowerCase().includes(searchQuery.toLowerCase()));
       });
 
       appRoot.innerHTML = \`
@@ -257,7 +183,7 @@ function generateLiveAppHtml(state) {
                 </div>
                 <div>
                   <h2 class="text-sm font-bold text-white tracking-tight leading-tight">\${projectState.brandName}</h2>
-                  <span class="text-[10px] font-semibold text-sky-400 uppercase tracking-wider">\${projectState.category.toUpperCase()} OPERATIONS</span>
+                  <span class="text-[10px] font-semibold text-sky-400 uppercase tracking-wider">\${projectState.category.toUpperCase()}</span>
                 </div>
               </div>
 
@@ -265,8 +191,8 @@ function generateLiveAppHtml(state) {
               <nav class="space-y-1.5">
                 \${projectState.screens.map(s => \`
                   <button type="button" data-screen-id="\${s.id}" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer \${activeScreenId === s.id ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/80'}">
-                    <span>\${s.title}</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full \${activeScreenId === s.id ? 'bg-sky-800 text-sky-200' : 'bg-slate-800 text-slate-400'}">\${s.rows ? s.rows.length : 4}</span>
+                    <span class="truncate">\${s.title}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full \${activeScreenId === s.id ? 'bg-sky-800 text-sky-200' : 'bg-slate-800 text-slate-400'}">\${s.rows ? s.rows.length : 0}</span>
                   </button>
                 \`).join('')}
               </nav>
@@ -275,7 +201,7 @@ function generateLiveAppHtml(state) {
             <!-- Sidebar Footer -->
             <div class="pt-6 border-t border-slate-800/80 mt-6 text-xs text-slate-500">
               <div class="flex items-center justify-between">
-                <span>Tenant: aryan.thinkiit.org</span>
+                <span>Figma Synced App</span>
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               </div>
             </div>
@@ -287,10 +213,10 @@ function generateLiveAppHtml(state) {
             <!-- Dashboard Header Bar -->
             <header class="flex flex-wrap items-center justify-between gap-4 px-6 md:px-8 py-4 bg-[#0d1424]/90 border-b border-slate-800 sticky top-[45px] z-40 backdrop-blur-md">
               <div>
-                <h1 class="text-lg font-bold text-white tracking-tight leading-none">\${projectState.brandName}</h1>
+                <h1 class="text-lg font-bold text-white tracking-tight leading-none">\${activeScreen.title}</h1>
                 <p class="text-xs text-emerald-400 mt-1 flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>Active Session • Figma Synthesized Architecture</span>
+                  <span>Active Screen • Figma AST Synced Architecture</span>
                 </p>
               </div>
 
@@ -298,7 +224,7 @@ function generateLiveAppHtml(state) {
                 <input type="text" id="table-search" placeholder="Filter records..." value="\${searchQuery}"
                        class="px-3.5 py-1.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 w-44 sm:w-60 transition-colors"/>
                 <button type="button" id="new-action-btn" class="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs shadow-md shadow-sky-600/30 transition-all cursor-pointer">
-                  + New Action
+                  + New Record
                 </button>
               </div>
             </header>
@@ -332,71 +258,7 @@ function generateLiveAppHtml(state) {
                 \`).join('')}
               </div>
 
-              <!-- Complete Data Table (Unclipped, Full Height) -->
-              <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl overflow-hidden mb-12">
-                <div class="p-5 border-b border-slate-800 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 class="text-sm font-bold text-white tracking-tight uppercase">\${activeScreen.title} (\${rows.length})</h3>
-                    <p class="text-xs text-slate-400 mt-0.5">\${activeScreen.subtitle || 'Synthesized from Figma AST auto-layout records'}</p>
-                  </div>
-                  <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-sky-950 text-sky-300 border border-sky-800">
-                    Live Feed
-                  </span>
-                </div>
-
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left text-xs">
-                    <thead>
-                      <tr class="border-b border-slate-800 text-slate-400 bg-slate-950/60 uppercase text-[10px] tracking-wider">
-                        \${columns.map(col => \`<th class="py-3 px-4 font-semibold">\${col}</th>\`).join('')}
-                        <th class="py-3 px-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-800/60 text-slate-200">
-                      \${rows.length === 0 ? \`
-                        <tr>
-                          <td colspan="\${columns.length + 1}" class="py-8 text-center text-slate-500">
-                            No records matching query "\${searchQuery}"
-                          </td>
-                        </tr>
-                      \` : rows.map((r, i) => \`
-                        <tr class="hover:bg-slate-800/40 transition-colors">
-                          \${columns.map(col => {
-                            const val = r[col] || "—";
-                            const isStatus = col.toLowerCase().includes("status");
-                            if (isStatus) {
-                              const isActive = val.toLowerCase().includes("active");
-                              return \`
-                                <td class="py-3.5 px-4">
-                                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase \${isActive ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
-                                    \${val}
-                                  </span>
-                                </td>
-                              \`;
-                            }
-                            return \`<td class="py-3.5 px-4">\${val}</td>\`;
-                          }).join('')}
-                          <td class="py-3.5 px-4 text-right">
-                            <button class="px-2.5 py-1 rounded-lg text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer">
-                              Edit
-                            </button>
-                          </td>
-                        </tr>
-                      \`).join('')}
-                    </tbody>
-                  </table>
-                </div>
-
-                <!-- Complete Table Footer -->
-                <div class="p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500 bg-slate-950/40">
-                  <span>Showing \${rows.length} of \${activeScreen.rows ? activeScreen.rows.length : rows.length} entities</span>
-                  <div class="flex items-center gap-1.5">
-                    <button class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 hover:text-white">Previous</button>
-                    <button class="px-2.5 py-1 rounded bg-sky-600 text-white font-bold">1</button>
-                    <button class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 hover:text-white">Next</button>
-                  </div>
-                </div>
-              </div>
+              \${activeScreen.type === 'form' ? renderFormContent(activeScreen) : renderTableContent(activeScreen, columns, rows)}
 
             </div>
           </div>
@@ -405,7 +267,7 @@ function generateLiveAppHtml(state) {
 
       // Wire events
       document.querySelectorAll(".nav-btn, .sub-tab-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
+        btn.addEventListener("click", () => {
           activeScreenId = btn.getAttribute("data-screen-id");
           renderDashboard();
         });
@@ -427,27 +289,139 @@ function generateLiveAppHtml(state) {
       const actionBtn = document.getElementById("new-action-btn");
       if (actionBtn) {
         actionBtn.addEventListener("click", () => {
-          alert(\`Created new \${activeScreen.title} record!\`);
+          alert("Add Record modal activated for: " + activeScreen.title);
+        });
+      }
+
+      const formEl = document.getElementById("screen-form");
+      if (formEl) {
+        formEl.addEventListener("submit", (e) => {
+          e.preventDefault();
+          formAlert = true;
+          renderDashboard();
+          setTimeout(() => { formAlert = false; renderDashboard(); }, 3000);
         });
       }
     }
 
-    function renderApp() {
-      if (currentView === "login") {
-        viewToggleText.innerText = "📊 View Operations Dashboard";
-        renderLoginPortal();
-      } else {
-        viewToggleText.innerText = "🔐 View Login Portal";
-        renderDashboard();
-      }
+    function renderFormContent(screen) {
+      return \`
+        <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl p-6 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-amber-950 text-amber-300 border border-amber-800">
+                \${screen.badge || 'Form Mode'}
+              </span>
+              <h3 class="text-sm font-bold text-white mt-1">\${screen.title} Configuration</h3>
+              <p class="text-xs text-slate-400">\${screen.subtitle || 'Direct form field editing'}</p>
+            </div>
+          </div>
+
+          \${formAlert ? \`
+            <div class="p-3 rounded-xl bg-emerald-950/80 border border-emerald-700 text-xs text-emerald-300 font-semibold flex items-center gap-2">
+              <span>✓ Form values saved and synced with live preview AST.</span>
+            </div>
+          \` : ''}
+
+          <form id="screen-form" class="space-y-4">
+            \${(screen.rows || []).map((row, idx) => \`
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-slate-800/60 last:border-b-0">
+                <div>
+                  <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                    \${row.Field || row.Name || Object.keys(row)[0] || ('Field ' + (idx + 1))}
+                  </label>
+                  <input type="text" value="\${row['Current Value'] || row.Value || Object.values(row)[0] || ''}"
+                         class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-sky-500 transition-colors"/>
+                </div>
+                <div>
+                  <span class="block text-xs font-semibold text-slate-500 mb-1">Type & Validation</span>
+                  <div class="text-xs text-slate-400 py-2">
+                    Type: \${row.Type || 'Text'} • Validation: \${row.Validation || 'Required'}
+                  </div>
+                </div>
+              </div>
+            \`).join('')}
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs shadow-md shadow-sky-600/30 transition-all cursor-pointer">
+                Save Configuration
+              </button>
+            </div>
+          </form>
+        </div>
+      \`;
     }
 
-    viewToggleBtn.addEventListener("click", () => {
-      currentView = currentView === "login" ? "dashboard" : "login";
-      renderApp();
-    });
+    function renderTableContent(screen, columns, rows) {
+      return \`
+        <div class="rounded-2xl bg-[#0f172a] border border-slate-800 shadow-2xl overflow-hidden mb-12">
+          <div class="p-5 border-b border-slate-800 flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-sm font-bold text-white tracking-tight uppercase">\${screen.title} (\${rows.length})</h3>
+              <p class="text-xs text-slate-400 mt-0.5">\${screen.subtitle || 'Synthesized from Figma AST records'}</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-sky-950 text-sky-300 border border-sky-800">
+              \${screen.badge || 'Live View'}
+            </span>
+          </div>
 
-    renderApp();
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-slate-800 text-slate-400 bg-slate-950/60 uppercase text-[10px] tracking-wider">
+                  \${columns.map(col => \`<th class="py-3 px-4 font-semibold">\${col}</th>\`).join('')}
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-200">
+                \${rows.length === 0 ? \`
+                  <tr>
+                    <td colspan="\${columns.length + 1}" class="py-8 text-center text-slate-500">
+                      No records matching query "\${searchQuery}"
+                    </td>
+                  </tr>
+                \` : rows.map((r, i) => \`
+                  <tr class="hover:bg-slate-800/40 transition-colors">
+                    \${columns.map(col => {
+                      const val = r[col] || "—";
+                      const isStatus = col.toLowerCase().includes("status");
+                      if (isStatus) {
+                        const isActive = String(val).toLowerCase().includes("active");
+                        return \`
+                          <td class="py-3.5 px-4">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase \${isActive ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'}">
+                              \${val}
+                            </span>
+                          </td>
+                        \`;
+                      }
+                      return \`<td class="py-3.5 px-4 \${col === columns[0] ? 'font-bold text-white' : 'text-slate-300'}">\${val}</td>\`;
+                    }).join('')}
+                    <td class="py-3.5 px-4 text-right">
+                      <button class="px-2.5 py-1 rounded-lg text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer">
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                \`).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Table Footer -->
+          <div class="p-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500 bg-slate-950/40">
+            <span>Showing \${rows.length} of \${screen.rows ? screen.rows.length : rows.length} entities</span>
+            <div class="flex items-center gap-1.5">
+              <button class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 hover:text-white">Previous</button>
+              <button class="px-2.5 py-1 rounded bg-sky-600 text-white font-bold">1</button>
+              <button class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-slate-400 hover:text-white">Next</button>
+            </div>
+          </div>
+        </div>
+      \`;
+    }
+
+    renderDashboard();
   </script>
 </body>
 </html>`;
@@ -462,13 +436,7 @@ const server = http.createServer((req, res) => {
   if (req.method === "OPTIONS") {
     res.writeHead(204);
     res.end();
-    return;
-  }
-
-  const url = new URL(req.url, `http://${req.headers.host || "localhost:3001"}`);
-
-  // Health endpoint
-  if (url.pathname === "/health") {
+  } else if (req.url === "/health" || req.url?.startsWith("/health")) {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
@@ -480,11 +448,7 @@ const server = http.createServer((req, res) => {
         timestamp: Date.now(),
       })
     );
-    return;
-  }
-
-  // Update endpoint to receive new project data from generator
-  if (url.pathname === "/update" && req.method === "POST") {
+  } else if (req.url === "/update" && req.method === "POST") {
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
@@ -495,7 +459,6 @@ const server = http.createServer((req, res) => {
         if (payload.category) currentProjectState.category = payload.category;
         if (payload.screens && Array.isArray(payload.screens)) currentProjectState.screens = payload.screens;
         if (payload.metrics && Array.isArray(payload.metrics)) currentProjectState.metrics = payload.metrics;
-        if (payload.isThinkIIT !== undefined) currentProjectState.isThinkIIT = payload.isThinkIIT;
         currentProjectState.updatedAt = new Date().toISOString();
 
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -505,19 +468,14 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({ error: err.message }));
       }
     });
-    return;
-  }
-
-  // API Project State
-  if (url.pathname === "/api/project") {
+  } else if (req.url === "/api/project" || req.url?.startsWith("/api/project")) {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(currentProjectState));
-    return;
+  } else {
+    // Serve full HTML
+    res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+    res.end(generateLiveAppHtml(currentProjectState));
   }
-
-  // Serve full HTML
-  res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-  res.end(generateLiveAppHtml(currentProjectState));
 });
 
 server.listen(PORT, "0.0.0.0", () => {

@@ -37,7 +37,6 @@ import {
   Globe,
 } from "lucide-react";
 import { GenerationResult } from "../../lib/types";
-import { ThinkIITLoginPortal } from "../ui/ThinkIITLoginPortal";
 
 export interface InteractivePreviewProps {
   result: GenerationResult;
@@ -51,15 +50,6 @@ export const InteractivePreview: React.FC<InteractivePreviewProps> = ({
   const cat = extracted?.category || result.primaryCategory || "healthcare";
   const adminUser = extracted?.adminUser || "Administrator";
   const screens = extracted?.screens || [];
-
-  const isThinkIIT =
-    brand.toLowerCase().includes("thinkiit") ||
-    screens.some((s) => s.id === "login") ||
-    (result.request.figmaUrl && result.request.figmaUrl.toLowerCase().includes("thinkiit"));
-
-  const [previewView, setPreviewView] = useState<"login" | "dashboard">(
-    isThinkIIT ? "login" : "dashboard"
-  );
 
   const [runnerMode, setRunnerMode] = useState<"port3001" | "sandbox">("port3001");
   const [isPort3001Active, setIsPort3001Active] = useState<boolean>(true);
@@ -315,33 +305,6 @@ export const InteractivePreview: React.FC<InteractivePreviewProps> = ({
             </div>
           )}
 
-          {runnerMode === "sandbox" && isThinkIIT && (
-            <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
-              <button
-                type="button"
-                onClick={() => setPreviewView("login")}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  previewView === "login"
-                    ? "bg-sky-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                🔐 Figma Login Screen
-              </button>
-              <button
-                type="button"
-                onClick={() => setPreviewView("dashboard")}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  previewView === "dashboard"
-                    ? "bg-sky-600 text-white shadow-sm"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                📊 Operations Dashboard
-              </button>
-            </div>
-          )}
-
           <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
             <button
               type="button"
@@ -461,14 +424,7 @@ export const InteractivePreview: React.FC<InteractivePreviewProps> = ({
               isDarkMode ? "dark bg-slate-950 text-slate-100" : "text-slate-900"
             }`}
           >
-            {previewView === "login" && isThinkIIT ? (
-              <ThinkIITLoginPortal
-                onLoginSuccess={() => {
-                  setPreviewView("dashboard");
-                }}
-              />
-            ) : (
-              <div className="w-full flex flex-col md:flex-row min-h-screen">
+            <div className="w-full flex flex-col md:flex-row min-h-screen">
             {/* Sidebar */}
             <aside
               className={`${
@@ -720,7 +676,6 @@ export const InteractivePreview: React.FC<InteractivePreviewProps> = ({
               </div>
             </div>
           </div>
-          )}
         </div>
       </div>
       )}
